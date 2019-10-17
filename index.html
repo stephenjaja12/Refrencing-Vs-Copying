@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Java Script Refrences Vs Copying</title>
+    </head>
+    <body>
+        <script>
+               // start with strings, numbers and booleans
+
+                    //(1) for strings
+                    let name =  'wes'
+                    let name2 =  name;
+                    console.log(name, name2);// wes  wes
+                    name =  'wesley';
+                    //note it does not update the value of name2
+                    console.log(name, name2);
+                    
+
+                    //(2) for number
+                    let number =  100;
+                    let number2 =  number;
+                    console.log(number,number2);
+                    //re-assing  the  number
+                    number = 200;
+                    //note number2 does not update
+                    console.log(number,number2);
+
+                    //(3) for booleans 
+                    let positive = true;
+                    let good = positive;
+                    console.log(positive, true);
+                    positive = false;
+                    console.log(positive, true);
+                    //conclusion strings booleans and numbers do not update if thier refrences are changed
+
+
+
+                // Let's say we have an array
+                     const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+ 
+
+                    // and we want to make a copy of it.
+                    // You might think we can just do something like this:
+
+                    // however what happens when we update that array?
+                    let team = players;
+                    console.log(players, team);// ['Wes', 'Sarah', 'Ryan', 'Poppy'] , ['Wes', 'Sarah', 'Ryan', 'Poppy']
+                    //and we re-assign a new value to the index of 3
+                    team[3] = 'Lux';
+                    console.log(players, team);// ['Wes', 'Sarah', 'Ryan', 'Lux'] , ['Wes', 'Sarah', 'Ryan', 'Lux']
+                      // oh no - we have edited the original array too!
+                      // note it updates the refrences even if players was updated team will still get  updated also
+                                    
+                      // now here is the problem!
+
+
+                      // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+
+                      // So, how do we fix this? We take a copy instead!
+
+                      // one way
+                      //is using the splice method
+                       let  team2 = players.slice();//if splice Start and End points are not given it returns a  copy of the array.
+                       //lets try to update our team2 and see if it gets updated withouth chaning the array
+                       console.log(players, team2);
+                       team2[0] = 'henry';
+
+                       // or create a new array and concat the old one in
+                       let team3 =  [].concat(players);
+                       team3[0] = 'Stefan';
+                       console.log(players, team3);// we updated the team3 array withouth affecting the players array
+
+                        // or use the new ES6 Spread
+                        //the spread syntax [...array] spread all items in the array in the new one 
+                        let team4 = [...players];
+                        // now when we update it, the original one isn't changed
+                        team4[0] = 'jaja';
+                        console.log(players, team4);
+                        // we updated the team4 array withouth affecting the players array
+
+
+                        //or use the array from method
+                        let team5 = Array.from(players);
+                        team5[0] = 'Tonia';
+                        console.log(players,team5);
+                        
+
+
+
+
+
+
+
+
+                         // The same thing goes for objects, let's say we have a person object
+
+                          // with Objects
+
+                          // and think we make a copy:
+                         let person = {
+                             name :'stephen',
+                             age : '19'
+                         };
+                                 // with Objects
+
+                        // and think we make a copy:
+
+                        // how do we take a copy instead?
+
+                         //we can use the object.assign()
+
+                         //  used to copy properties of an object to another  syntax Object.assign({copyingto}, copyinf-from,{adding more properties});
+                         let cap1 =  Object.assign({}, person, {number :99});
+                         console.log(cap1);
+                         //succesfully updated  withouth changing the value of the person object
+
+                         //or you can  ...spread into an object too
+                         let cap2 = {...person};
+                          cap2.gender = 'male';
+                          console.log(person, cap2);
+
+                          //all this method are shallow meaning they don't go deep into nested object properties
+
+                          let wes = {
+                              name : 'tonia',
+                              age : 22,
+                              details:{
+                                  username: 'Sexy Diva',
+                                  gender: 'female'
+
+                              }
+                          }
+
+                          let testObj = Object.assign({}, wes);
+                          testObj.details.username = 'Itz favy';
+                          console.log(wes , testObj);
+                          /*you can see that the result of the console updates the username of the testObj and the wes object also thereby
+                           they are all shallow method and nested properties if changed will be updated in both places
+                          */
+
+                          //but you can use deep-cloning but it's better you use this below
+                          let testObj2 = JSON.parse(JSON.stringify(wes));
+                          testObj2.details.username =  'Gerald';
+                          console.log(wes, testObj2);//works perfectly
+
+     
+        </script>
+    </body>
+</html>
